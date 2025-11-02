@@ -1,0 +1,267 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{amsfonts, amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{indentfirst}
+\usepackage{float}
+
+\geometry{a4paper, margin={3cm,2cm,2cm,3cm}}
+\setlength{\parindent}{1.25cm}
+
+% --- Configuração de Títulos (com titlesec) ---
+% Força os títulos a terem 12pt (\normalsize) e negrito
+
+\titleformat{\section}
+  {\normalsize\bfseries\MakeUppercase} % formato: 12pt e negrito
+  {\thesection.}         % rótulo (número): "1."
+  {1em}                  % separação: 1 "M" de espaço
+  {}                     % código antes do título (pode deixar vazio)
+
+\titleformat{\subsection}
+  {\normalsize\MakeUppercase} % formato: 12pt e negrito
+  {\thesubsection.}      % rótulo (número): "1.1."
+  {1em}                  % separação
+  {}                     % código antes
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries} % formato: 12pt e negrito
+  {\thesubsubsection.}   % rótulo (número): "1.1.1."
+  {1em}                  % separação
+  {}                     % código antes
+
+\newcommand{\universidade}{Universidade Federal de Santa Catarina}
+\newcommand{\centro}{Centro Tecnológico de Joinville - CTJ}
+\newcommand{\disciplina}{EMB5641 - Sistemas de Controle}
+\newcommand{\curso}{Engenharia Mecatrônica}
+\newcommand{\professor}{Prof. Alexandro Garro Brito}
+\newcommand{\titulo}{Controle de profundidade de veículo subaquático autônomo (AUV)}
+\newcommand{\autor}{Hebert Alan Kubis}
+\newcommand{\matricula}{23102547}
+
+\newcommand{\vehicleMass}{$M_t$}
+\newcommand{\vehicleVolume}{$V_t$}
+\newcommand{\SensorPressH}{$h_p$}
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        {\bfseries \MakeUppercase{\universidade}}\\
+        {\bfseries \MakeUppercase{\curso}}\\[3cm]
+        
+        {\MakeUppercase{\autor}}\\
+
+        \vfill
+        {\bfseries \MakeUppercase{\titulo}}\\
+        \vfill
+
+        {Joinville}\\
+        {\number\year}
+
+    \end{center}
+\end{titlepage}
+ 
+% Folha de rosto (ABNT)
+\begin{titlepage}
+    \begin{center}
+        {\MakeUppercase{\autor}}\\
+        \vfill
+
+        {\bfseries \MakeUppercase{\titulo}}\\[2cm]
+        
+        \hspace*{8cm}
+        \parbox[t]{\dimexpr\textwidth-8cm\relax}{
+            {Trabalho apresentado ao \centro\ da\ \universidade\ como requisito 
+            parcial para a disciplina \disciplina.}\\[1cm]
+            {\professor}\\
+        }\\
+
+        \vfill
+
+        {Joinville}\\
+        {\number\year}
+
+    \end{center}
+\end{titlepage}
+
+\begin{abstract}
+    Ainda tenho que escrever o trabalho para poder resumir
+\end{abstract}
+\clearpage
+
+\tableofcontents
+\clearpage
+
+\section{Introdução}
+    No presente relatório será descrito o processo de modelamento do sistema de controle de 
+    profundidade de um AUV (Veículo Autônomo Submarino, do inglês Autonomous Underwater Vehicle). 
+    O processo de modelamento desse sistema se dá pela união entre duas necessidades, uma é a 
+    realização do trabalho avaliativo de Sistemas de controle e a outra é a necessidade de um 
+    controle de profundidade preciso para o veículo Yvy da equipe Terra Competition da \universidade, campus Joinville.
+\clearpage
+
+\section{Definição do sistema}
+    O sistema a ser controlado é um AUV (Autonomous Underwater Vehicle) que utiliza 6 motores, 
+    4 para controle no plano xOy e 2 para controle no eixo Z (vertical). Outra característica é 
+    que este veículo possui 2 cilindros em seu interior. Um deles está posicionado encostado na 
+    parte de cima ao longo do eixo X, sendo que neste fica toda a eletrônica responsável por 
+    controlar o veículo, e um cilindro menor na mesma orientação encostado na parte inferior do 
+    veículo, sendo que esse é o cilindro responsável por abrigar a bateria.
+    
+    Dado essa descrição do veículo, pode-se definir o objetivo do sistema de controle: 
+    {\bfseries estabilizar o veículo em uma dada profundidade.}
+
+    \subsection{Considerações}
+        Para o modelamento do sistema serão feitas as seguintes considerações:
+        \begin{itemize}
+            \item Será avaliado somente o movimento vertical do veículo, assumindo que o peso dele está homogeneamente distribuído ao longo dos outros eixos;
+            \item Será assumido que os dois motores que controlam o movimento vertical estão equidistantes ao longo do eixo Y em relação à origem e estão sobre a origem em X. Desta forma, não será considerado o torque gerado pelos motores superiores sobre os eixos X e Y caso estes estejam desalinhados;
+            \item O eixo Z positivo é direcionado para baixo no veículo;
+            \item O veículo está completamente submerso.
+        \end{itemize}
+
+    \subsection{Fontes de dados}
+        Para controlar o veículo são necessárias fontes de dados para saber como atuar na malha. Com isso, os sensores disponíveis para analisar o comportamento do veículo são:
+        \begin{itemize}
+            \item Sensor de profundidade, fonte precisa de dados de pressão;
+            \item Pixhawk PX4, fonte de dados precisa de aceleração;
+            \item Cruzamento dos dados desses dois sensores, por integração e derivação numérica, para obter a velocidade.
+        \end{itemize}
+
+\section{Modelamento do sistema}
+    \subsection{Variaveis do sistema}
+        Para modelar o sistema de controle de profundidade do AUV alguns dados precisam ser 
+        considerados, sendo que muitos, e talvez todos, podem sofrer alterações. Para modelar 
+        um sistema que permita controlar o veículo mesmo com a alteração de suas características, 
+        será consideradas variáveis no lugar dos dados do veículo. O seguintes dados serão usados:
+        
+        \begin{itemize}
+            \item {\vehicleMass} - Massa do veículo;
+            \item {\vehicleVolume} - Volume do veículo;
+            \item {\SensorPressH} - Distância que o sensor de pressão está do topo do AUV;
+        \end{itemize}
+    
+    \subsection{Equilibrio de forças}
+        Para modelar o sistema de controle de profundidade do AUV, primeiramente é necessário 
+        analisar as forças que atuam sobre o veículo. As forças que atuam sobre o veículo são:
+        
+        \begin{itemize}
+            \item Força peso, $F_{p}$;
+            \item Força de empuxo, $F_{e}$;
+            \item Força gerada pelos motores, $F_{m}$;
+            \item Força de arrasto, $F_{d}$.
+        \end{itemize}
+
+        Fazendo o somatorio das forças que atuam sobre o veículo e aplicando a segunda Lei 
+        de Newton tem-se:
+
+        \begin{equation}
+            \sum F = F_{p} - F_{e} + F_{m} - F_{d} = m \cdot a
+        \end{equation}
+
+        Onde $a$ é a aceleração do veículo ao longo do eixo Z, ou seja, $a = \frac{d^2z}{dt^2}$.
+
+        Substituindo as forças na equação acima:
+
+        \begin{equation}
+            M_t \cdot \frac{d^2z}{dt^2} = M_t \cdot g - \rho \cdot g \cdot V_t + F_{m} - B_d \cdot \frac{dz}{dt}
+            \label{eq:somatorio de forcas}
+        \end{equation}
+
+        Assumindo que o AUV se encontra numa posição que é seu ponto de equilibrio $z_0$ mais uma 
+        perturbação $\Delta z$, ou seja, $z = z_0 + \Delta z$. Com isso, a equação \ref{eq:somatorio de forcas} fica:
+
+        \begin{equation}
+            M_t \cdot \frac{d^2(z_0 + \Delta z)}{dt^2} = (M_t \cdot g - \rho \cdot g \cdot V_t) + F_{me} + \Delta F_{m} - B_d \cdot \frac{d(z_0 + 
+            \Delta z)}{dt}
+        \end{equation}
+
+        Onde $F_{me}$ é a força dos motores no ponto de equilibrio e $\Delta F_{m}$ é a variação 
+        dessa força. Sabendo que a derivada de uma constante é nula, ou seja, $\frac{dz_0}{dt} = 0$ e 
+        $\frac{d^2z_0}{dt^2} = 0$, tem-se:
+
+        \begin{equation}
+            M_t \cdot \frac{d^2 \Delta z}{dt^2} = (M_t \cdot g - \rho \cdot g \cdot V_t) + F_{me} + \Delta F_{m} - B_d \cdot \frac{d \Delta z}{dt}
+            \label{eq:somatorio de forcas com delta}
+        \end{equation}
+
+        Da equação \ref{eq:somatorio de forcas} sabe-se que no ponto de equilibrio a parcela 
+        $\frac{d^2z}{dt^2} = 0$ e $\frac{dz}{dt} = 0$, logo:
+
+        \begin{equation}
+            0 = M_t \cdot g - \rho \cdot g \cdot V_t + F_{me}
+        \end{equation}
+
+        \begin{equation}
+            F_{me} = \rho \cdot g \cdot V_t - M_t \cdot g
+            \label{eq:forca de equilibrio dos motores}
+        \end{equation}
+
+        Substituindo a equação \ref{eq:forca de equilibrio dos motores} na equação 
+        \ref{eq:somatorio de forcas com delta} tem-se:
+
+        \begin{equation}
+            M_t \cdot \frac{d^2 \Delta z}{dt^2} = \Delta F_{m} - B_d \cdot \frac{d \Delta z}{dt}
+        \end{equation}
+
+        Isolando os termos:
+
+        \begin{equation}
+            M_t \cdot \frac{d^2 \Delta z}{dt^2} + B_d \cdot \frac{d \Delta z}{dt} = \Delta F_{m}
+        \end{equation}
+
+        Agora, assumindo condições iniciais nulas, ou seja, $\Delta z(0) = 0$ e $\frac{d \Delta z(0)}{dt} = 0$, 
+        aplicando a Transformada de Laplace na equação acima tem-se:
+
+        \begin{equation}
+            M_t \cdot s^2 \cdot \Delta Z(s) + B_d \cdot s \cdot \Delta Z(s) = \Delta F_{m}(s)
+        \end{equation}
+
+        Reorganizando a equação para obter a função de transferência:
+
+        \begin{equation}
+            \frac{\Delta Z(s)}{\Delta F_{m}(s)} = \frac{1}{M_t \cdot s^2 + B_d \cdot s}
+        \end{equation}
+
+        Como o sistema encontrado é de segunda ordem, divide-se o numerador e o denominador por 
+        $M_t$ para obter a forma padrão da função de transferência:
+
+        \begin{equation}
+            \frac{\Delta Z(s)}{\Delta F_{m}(s)} = \frac{\frac{1}{M_t}}{s^2 + \frac{B_d}{M_t} \cdot s}
+        \end{equation}
+
+        Com isto é possivel analisar que o sistema encontrado é de 2ª ordem do tipo 1, pois o maior 
+        grau do denominador é 2 e, reorganizando os termor, é possivel visualizar que possui um polo 
+        na origem, que torna o erro em estado estacionario nulo para uma entrada degrau.
+
+        Por conta da natureza do sistema a ser controlado percebe-se que que o controlador a ser 
+        implementado deve ser um P ou PD caso seja necessária uma resposta mais rápida.
+    
+    \subsection{Parametros do sistema}
+
+    \subsection{Análise do sistema}
+
+\section{Controlador}
+    \subsection{Requisitos de desempenho}
+
+    \subsection{Análise do lugar das raízes}
+
+    \subsection{Projeto do controlador}
+
+    \subsection{Resposta em frequência}
+
+\section{Implementação}
+    \subsection{Discretização do controlador}
+
+    \subsection{Aplicação no sistema}
+
+    \subsection{Testes e resultados}
+
+\section{Conclusão}
+\end{document}
