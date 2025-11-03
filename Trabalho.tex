@@ -44,9 +44,9 @@
 \newcommand{\autor}{Hebert Alan Kubis}
 \newcommand{\matricula}{23102547}
 
-\newcommand{\vehicleMass}{$M_t$}
-\newcommand{\vehicleVolume}{$V_t$}
-\newcommand{\SensorPressH}{$h_p$}
+\newcommand{\vehicleMass}{M_t}
+\newcommand{\vehicleVolume}{V_t}
+\newcommand{\SensorPressH}{h_p}
 
 \begin{document}
 
@@ -142,9 +142,9 @@
         será consideradas variáveis no lugar dos dados do veículo. O seguintes dados serão usados:
         
         \begin{itemize}
-            \item {\vehicleMass} - Massa do veículo;
-            \item {\vehicleVolume} - Volume do veículo;
-            \item {\SensorPressH} - Distância que o sensor de pressão está do topo do AUV;
+            \item {$\vehicleMass$} - Massa do veículo;
+            \item {$\vehicleVolume$} - Volume do veículo;
+            \item {$\SensorPressH$} - Distância que o sensor de pressão está do topo do AUV;
         \end{itemize}
     
     \subsection{Equilibrio de forças}
@@ -244,6 +244,28 @@
         implementado deve ser um P ou PD caso seja necessária uma resposta mais rápida.
     
     \subsection{Parametros do sistema}
+        Para fazer a análise do sistema é necessario definir os parametros que o compõem, e como este é um veiculo real os parametros dele são os seguintes:
+
+        \begin{itemize}
+            \item Massa do veículo, {$\vehicleMass$} = 19 kg;
+            \item Volume do veículo, {$\vehicleVolume$} =  m$^3$;
+            \item Coeficiente de arrasto, $B_d$ = ;
+            \item Densidade da água de piscina, $\rho$ = 1000 kg/m$^3$;
+            \item Aceleração da gravidade, $g$ = 9.81 m/s$^2$.
+        \end{itemize}
+
+        A massa do veiculo foi medida com uma balança no Laboratório de Interação Fluido-Estrutura (LIFE) da \universidade. Ja o volume foi obtido a partir do modelo 
+        CAD do veiculo, que foi feito no SolidWorks.
+
+        Para obter o coeficiente de arrasto foi assumido que o AUV é um cubo de lado 0.4 m ja que suas dimensões são de 0.38 x 0.4 x 0.38 m. Assim, calculando o número de Reynolds para $\rho$ = 
+        1000 kg/m$^3$, $\mu$ = 0.001 Pa.s, $v$ = 0.1 m/s e $L$ = 0.4 m tem-se: 
+
+        \begin{equation}
+            Re = \frac{\rho \cdot v \cdot L}{\mu} = \frac{1000 \cdot 0.1 \cdot 0.4}{0.001} = 40000
+        \end{equation}
+
+        Com este valor que é Re > $10^4$ o coeficiente de arrasto para um cubo é $C_d = 1.05$
+
 
     \subsection{Análise do sistema}
 
