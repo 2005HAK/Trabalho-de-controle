@@ -248,8 +248,8 @@
 
         \begin{itemize}
             \item Massa do veículo, {$\vehicleMass$} = 19 kg;
-            \item Volume do veículo, {$\vehicleVolume$} =  m$^3$;
-            \item Coeficiente de arrasto, $B_d$ = ;
+            \item Volume do veículo, {$\vehicleVolume$} =  0.014 m$^3$;
+            \item Coeficiente de arrasto, $B_d$ = 42 kg/s;
             \item Densidade da água de piscina, $\rho$ = 1000 kg/m$^3$;
             \item Aceleração da gravidade, $g$ = 9.81 m/s$^2$.
         \end{itemize}
@@ -264,10 +264,62 @@
             Re = \frac{\rho \cdot v \cdot L}{\mu} = \frac{1000 \cdot 0.1 \cdot 0.4}{0.001} = 40000
         \end{equation}
 
-        Com este valor que é Re > $10^4$ o coeficiente de arrasto para um cubo é $C_d = 1.05$
+        Com este valor que é Re > $10^4$ o coeficiente de arrasto para um cubo é $C_d = 1.05$ \cite{Cd}. Mas, como é possivel ver na 
+        equação \ref{eq:somatorio de forcas} não é de $C_D$ que se necessita, mas sim do coeficiente $B_d$ que é usado para tratar o 
+        arrasto de forma linear. Assim, para obter $B_d$ é necessario definir uma velocidade de operação do veiculo, que foi assumida 
+        como 0.5 m/s para os calculos se baseando em velocidades de operação de outros AUVs, como o BlueROV2 da BlueRobotics 
+        \cite{bbauv4.5} e o BBAUV 4.5 da Bumblebee \cite{bluev2} que podem se mover à até 1.5 m/s.
 
+        Com isso, o coeficiente $B_d$ é obtido a partir da formula do arrasto:
+
+        \begin{equation}
+            F_d = \frac{1}{2} \cdot \rho \cdot v_{op}^2 \cdot C_d \cdot A
+        \end{equation}
+
+        Onde $A$ é a área de seção transversal do veiculo, que é 0.16 m$^2$ (0.4 x 0.4 m), $v_{op}$ é a velocidade de operação (0.5 m/s), $\rho$ é a densidade do 
+        fluido (1000 kg/m$^3$) e $C_d$ é o coeficiente de arrasto (1.05). Assim, unindo isto a formula do arrasto linear:
+
+        \begin{equation}
+            F_d = B_d \cdot v_{op} = \frac{1}{2} \cdot \rho \cdot v_{op}^2 \cdot C_d \cdot A
+        \end{equation}
+
+        Isolando $B_d$ tem-se:
+
+        \begin{equation}
+            B_d = \frac{\frac{1}{2} \cdot \rho \cdot v_{op}^2 \cdot C_d \cdot A}{v_{op}} = \frac{1}{2} \cdot \rho \cdot v_{op} \cdot C_d \cdot A
+        \end{equation}
+
+        Substituindo os valores conhecidos:
+
+        \begin{equation}
+            B_d = \frac{1}{2} \cdot 1000 \cdot 0.5 \cdot 1.05 \cdot 0.16 = 42 \,\, kg/s
+        \end{equation}
+
+        É importante ressaltar que o coeficiente de arrasto $B_d$ assumido é válido em torno da velocidade de operação escolhida, e que uma velocidade maior
+        fara com que o controlador seja atue de maneira lenta no sistema, ja que o arrasto será maior do que previsto. Ja se a velocidade for menor 
+        o controlador atuará de maneira mais agressiva, podendo causar oscilações no sistema.
 
     \subsection{Análise do sistema}
+        Com os parametros definidos, a função de transferência do sistema fica:
+
+        \begin{equation}
+            \frac{\Delta Z(s)}{\Delta F_{m}(s)} = \frac{\frac{1}{19}}{s^2 + \frac{42}{19} \cdot s} = \frac{0.0526}{s^2 + 2.2105 \cdot s}
+        \end{equation}
+
+        Onde os valores foram arredondados para 4 casas decimais. 
+
+        Com isso é possivel fazer a análise do sistema plotando o seu lugar das raízes no matlab, como mostrado na figura \ref{fig:root locus open loop}.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{img/root_locus_open_loop.jpg}
+            \caption{Lugar das raízes do sistema em malha aberta}
+            \label{fig:root locus open loop}
+        \end{figure}
+
+        Com isso é possivel perceber que o sistema em malha aberta é marginalmente estável por conta do polo em zero ja mencionado. Outro ponto importante 
+        é que um controlador proporcional é suficiente para estabilizar o sistema, ja que os polos de malha fechada nunca cruzam para o semiplano direito, 
+        portanto isso confirma a análise anterior de que um controlador P ou PD é suficiente para controlar o sistema.
 
 \section{Controlador}
     \subsection{Requisitos de desempenho}
@@ -286,4 +338,8 @@
     \subsection{Testes e resultados}
 
 \section{Conclusão}
+
+\bibliographystyle{plain}
+\bibliography{referencias}
+
 \end{document}
