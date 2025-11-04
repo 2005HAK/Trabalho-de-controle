@@ -308,13 +308,13 @@
 
         Onde os valores foram arredondados para 4 casas decimais. 
 
-        Com isso é possivel fazer a análise do sistema plotando o seu lugar das raízes no matlab, como mostrado na figura \ref{fig:root locus open loop}.
+        Com isso é possivel fazer a análise do sistema plotando o seu lugar das raízes no matlab, como mostrado na figura \ref{fig:root locus Gs}.
 
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.8\textwidth]{img/root_locus_open_loop.jpg}
-            \caption{Lugar das raízes do sistema em malha aberta}
-            \label{fig:root locus open loop}
+            \includegraphics[width=0.8\textwidth]{img/root_locus_Gs.jpg}
+            \caption{Lugar das raízes do sistema}
+            \label{fig:root locus Gs}
         \end{figure}
 
         Com isso é possivel perceber que o sistema em malha aberta é marginalmente estável por conta do polo em zero ja mencionado. Outro ponto importante 
@@ -323,6 +323,37 @@
 
 \section{Controlador}
     \subsection{Requisitos de desempenho}
+        Para o sitema de controle de profundidade do AUV é necessario definir os requisitos de desempenho do sistema controlado. Para isso, é necessário analisar 
+        o ambiente e as condições em que o AUV opera. Pensando que o AUV pode estar a 1m de profundidade e pode ser dado um comando em degrau para que ele se posicione 
+        a 5m de profundidade, um percentual de sobressinal aceitavel seria algo como $PSS = 5\%$. A principal justificativa para limitar o Percentual de Sobressinal 
+        (PSS) é a \textbf{segurança operacional e a integridade do veículo}.
+
+        O AUV Yvy pode ser comandado a operar em profundidades muito próximas do solo (seja o fundo do mar ou o piso do tanque de testes). Por exemplo, se o sistema 
+        de controle comandar uma profundidade de referência $z_{ref} = 5,0 \text{ m}$ quando o solo está mapeado em $z_{solo} = 5,1 \text{ m}$, um PSS de apenas 5\% 
+        já seria catastrófico. O cálculo do sobressinal seria: 
+        
+        \begin{equation}
+            \Delta z = z_{ref} - z_{inicial} = 5,0 \text{ m} - 1,0 \text{ m} = 4,0 \text{ m}
+        \end{equation}
+
+        \begin{equation}
+            z_{pico} = z_{ref} + (\Delta z \times \frac{PSS}{100}) = 5,0 \text{ m} + (4,0 \text{ m} \times 0,05) = 5,2 \text{ m}
+        \end{equation}
+
+        Neste cenário, o AUV tentaria atingir 5,2 m, colidindo com o solo em 5,1 m. Mesmo que a velocidade no pico seja momentaneamente nula, a colisão poderia 
+        danificar sensores frágeis (como câmeras ou sonar) e levantar sedimentos, comprometendo a missão.
+
+        Portanto, um $PSS \le 5\%$ é definido como um requisito de segurança crítico para garantir uma margem operacional mínima, aliado a uma condição de que 
+        $z_{ref} \le 0.95 \cdot h_{max}$, onde $h_{max}$ é a profundidade máxima do ambiente onde o AUV se encontra.
+
+        Outro critério que deve ser definido é o tempo de acomodação $T_s$ do sistema controlado, que é o tempo entre dar a entrada no sistema e ele realmente chegar à 
+        profundidade especificada. Pensando em uma diferença de profundidade de 4m, partindo de 1m e chegando em 5m, e a velocidade de operação definida como 0.5m/s, é aceitavel 
+        definir um tempo de acomodação de 10s, visto que demoraria cerca de 8s para que o veiculo chegue a profundidade especificada e mais 2s de espera definido arbitrariamente
+        para que ele estabilize.
+
+        O ultimo requisito de desempenho que o sistema controlado deve atingir é que o erro em regime permanente seja 0, ou seja, que o AUV realmente chegue na referencia e 
+        fique nela. De todo modo, este requisito é garantido pelo que ja foi discutido antes, o polo na origem, que se traduz como um integrador, classificando o sistema como de 
+        2ª ordem do tipo 1, ou seja, com $e_{ee}$ nulo para uma entrada em degrau.
 
     \subsection{Análise do lugar das raízes}
 
