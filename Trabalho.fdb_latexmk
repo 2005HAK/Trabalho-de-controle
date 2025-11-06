@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex Trabalho"] 1762261846.05593 "Trabalho.aux" "Trabalho.bbl" "Trabalho" 1762262087.59668 0
+["bibtex Trabalho"] 1762387351.89025 "Trabalho.aux" "Trabalho.bbl" "Trabalho" 1762387429.90535 0
   "./referencias.bib" 1762253549 442 1b18cae88e0f61f81a282846f5c88562 ""
   "C:/Users/heber/AppData/Local/Programs/MiKTeX/bibtex/bst/bibtex/plain.bst" 1291864736 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
-  "Trabalho.aux" 1762262086 3271 3c2bad0a35fd330c0383b3d01b6c1901 "pdflatex"
+  "Trabalho.aux" 1762387428 3436 448e7a89e04f53dc61d385f01ffb9280 "pdflatex"
   (generated)
   "Trabalho.bbl"
   "Trabalho.blg"
   (rewritten before read)
-["pdflatex"] 1762262085.90504 "c:/Users/heber/OneDrive/Documentos/Codigos/Trabalho-de-Controle/Trabalho.tex" "Trabalho.pdf" "Trabalho" 1762262087.59741 0
+["pdflatex"] 1762387427.51141 "c:/Users/heber/OneDrive/Documentos/Codigos/Trabalho-de-Controle/Trabalho.tex" "Trabalho.pdf" "Trabalho" 1762387429.9062 0
   "C:/Users/heber/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1762254091 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/heber/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1095.pk" 1762254098 28976 734d6f1e99821027b253304d691494e3 ""
   "C:/Users/heber/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ecbx1200.pk" 1762254101 31952 7da9db42b287ab07b4365ed8d7437778 ""
@@ -105,12 +105,12 @@
   "C:/Users/heber/AppData/Local/Programs/MiKTeX/tex/latex/titlesec/titlesec.sty" 1736608268 48766 87a17a4ef312a39cd43896e34a679a56 ""
   "C:/Users/heber/AppData/Local/Programs/MiKTeX/tex/latex/tools/indentfirst.sty" 1749468414 1618 30b01152766afcef2ed8f904cfdd3cc6 ""
   "C:/Users/heber/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
-  "Trabalho.aux" 1762262086 3271 3c2bad0a35fd330c0383b3d01b6c1901 "pdflatex"
-  "Trabalho.bbl" 1762261846 242 da383003843c050ba514e22e6d11b856 "bibtex Trabalho"
-  "Trabalho.out" 1762262086 2923 912e59fc8cc89132f323dd2cbf5c7b55 "pdflatex"
-  "Trabalho.tex" 1762262085 18608 52555d9ec199944c7e77e699eb367c42 ""
-  "Trabalho.toc" 1762262086 1595 eba338f20214a98bcefa6b879d07d6ba "pdflatex"
-  "c:/Users/heber/OneDrive/Documentos/Codigos/Trabalho-de-Controle/Trabalho.tex" 1762262085 18608 52555d9ec199944c7e77e699eb367c42 ""
+  "Trabalho.aux" 1762387428 3436 448e7a89e04f53dc61d385f01ffb9280 "pdflatex"
+  "Trabalho.bbl" 1762387352 242 da383003843c050ba514e22e6d11b856 "bibtex Trabalho"
+  "Trabalho.out" 1762387428 2923 912e59fc8cc89132f323dd2cbf5c7b55 "pdflatex"
+  "Trabalho.tex" 1762387427 20153 32e872c7790ef921ddd9497c8319ed0f ""
+  "Trabalho.toc" 1762387428 1602 f9025f36b0646e03ce744f84bffa47d1 "pdflatex"
+  "c:/Users/heber/OneDrive/Documentos/Codigos/Trabalho-de-Controle/Trabalho.tex" 1762387427 20153 32e872c7790ef921ddd9497c8319ed0f ""
   "img/root_locus_Gs.jpg" 1762253549 43903 579b910ba3926073cb095bd25292fe54 ""
   (generated)
   "Trabalho.aux"

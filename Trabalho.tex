@@ -356,6 +356,51 @@
         2ª ordem do tipo 1, ou seja, com $e_{ee}$ nulo para uma entrada em degrau.
 
     \subsection{Análise do lugar das raízes}
+        Na imagem \ref{fig:root locus Gs} foi possivel visualizar a estabilidade da malha para diferentes valores de $K_p$. Agora, com os requisitos de desempenho estabeleciddos 
+        é possível definir as regioes no lugar das raizes que atendem aos requisitos. Primeiramente deve-se estabelecer a equação da malha fechada do sistema, sendo esta a seguinte ao 
+        assumir a utilização de somente um controlador $K_p$:
+
+        \begin{equation}
+            \frac{\Delta Z(s)}{\Delta F_m(s)} = \frac{0.0526 K_p}{s^2 + 2.2105s + 0.0526 K_p}
+        \end{equation}
+
+        Com isso sabe-se que:
+
+        \begin{equation}
+            \omega_n^2 = 0.0526K_p
+        \end{equation}
+
+        e que:
+
+        \begin{equation}
+            2 \zeta \omega_n = 2.2105
+            \label{eq:zetaomegan}
+        \end{equation}
+
+        Para o requisito de tempo de subida tem-se que:
+
+        \begin{equation}
+            T_s \approx \frac{4}{|\zeta \omega_n|} 
+            \label{eq:timerise}
+        \end{equation}
+
+        Substituindo a equação \ref{eq:zetaomegan} em \ref{eq:timerise}:
+
+        \begin{equation}
+            T_s \approx \frac{4}{|\zeta \omega_n|} < 10
+        \end{equation}
+
+        \begin{equation}
+            |\zeta \omega_n| < 0.4
+        \end{equation}
+
+        Da planta sabe-se que $\zeta \omega_n$ é a parte real dos polos e que este termo é negativo, logo:
+
+        \begin{equation}
+            \zeta \omega_n < -0.4
+        \end{equation}
+
+        Outro ponto é 
 
     \subsection{Projeto do controlador}
 
